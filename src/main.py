@@ -1,0 +1,44 @@
+import simulateGene
+import readSimulateGene
+import upgma
+import matplotlib.pyplot as plt
+
+def test_upgma(sequences, familles):
+    up = upgma.upgma(sequences, familles)
+    
+    # Application de l'algorithme UPGMA :
+    jointures, jointures_array = up.algo_upgma()
+
+    # Extraction des clusters :
+    up.extract_clusters(jointures_array)
+
+    print("Familles attendues :")
+    print(familles)
+    print("")
+    print("Familles prédites :")
+    print(up.clusters)
+    print("")
+
+    # Évaluation des performances de l'algo de clustering :
+    up.eval_perf(familles)
+
+    # Génération de l'arbre : 
+    up.generate_tree(jointures)
+
+
+def main():
+    sg = simulateGene.simulateGene("./genes",10,20)
+
+    # Simulation des familles de gènes
+    sg.generate_genes()
+
+    # Génération du tableau de séquences et de gènes :
+    rsg = readSimulateGene.readSimulateGene()
+    rsg.generate_sequences()
+
+    # Algorithme UPGMA :
+    test_upgma(rsg.sequences[0:10], rsg.familles[0:10])
+
+
+if __name__=="__main__":
+    main()
