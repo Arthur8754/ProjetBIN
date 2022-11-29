@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 def test_upgma(sequences, familles):
     up = upgma.upgma(sequences, familles)
     
+    print("Séquences (extrait) :")
+    print(up.sequences[0:5])
+    print("")
+    print("Familles (extrait) :")
+    print(up.familles[0:5])
     # Application de l'algorithme UPGMA :
     jointures, jointures_array = up.algo_upgma()
 
