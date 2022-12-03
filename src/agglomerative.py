@@ -1,14 +1,18 @@
 """
+Dans cette classe, on applique un algo de clustering hiérarchique (en ascendant) avec scikit learn
+"""
+
+"""
 Dans cette classe, on va appliquer l'algorithme des KMeans sur nos gènes. Plus précisément, on va l'appliquer sur Levenshtein.
 """
 
 import distances
-from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering
 import readSimulateGene
 import numpy as np
 from sklearn.metrics import confusion_matrix
 
-class kmeans:
+class agglomerative:
 
     def __init__(self, sequences, familles):
         self.sequences = sequences
@@ -56,11 +60,11 @@ class kmeans:
                 self.D[i].append(dist)
 
 
-    def algo_kmeans(self, K):
+    def algo_agglomerative_clustering(self, K):
         """
-        Appel de la fonction KMeans de scikit learn. 
+        Appel de la fonction AgglomerativeClustering de scikit learn. 
         """
-        modele = KMeans(n_clusters=K)
+        modele = AgglomerativeClustering(n_clusters=K)
         self.prediction = modele.fit_predict(self.D)
         
     def eval_perf(self):
@@ -78,19 +82,19 @@ class kmeans:
 def main():
     rsg = readSimulateGene.readSimulateGene()
     rsg.generate_sequences()
-    sequences = rsg.sequences
-    familles = rsg.familles
-    km = kmeans(sequences, familles)
-    km.clean_familles()
-    #km.matrice_distance_levenshtein()
-    km.matrice_distance_hamming()
-    #print(km.D)
-    km.algo_kmeans(len(np.unique(familles)))
-    #print("Familles prédites :")
-    #print(km.prediction)
-    #print("Familles attendues :")
-    #print(km.familles)
-    km.eval_perf()
+    sequences = rsg.sequences[0:10]
+    familles = rsg.familles[0:10]
+    agg = agglomerative(sequences, familles)
+    agg.clean_familles()
+    agg.matrice_distance_levenshtein()
+    #agg.matrice_distance_hamming()
+    print(agg.D)
+    agg.algo_agglomerative_clustering(len(np.unique(familles)))
+    print("Familles prédites :")
+    print(agg.prediction)
+    print("Familles attendues :")
+    print(agg.familles)
+    agg.eval_perf()
 
 if __name__=="__main__":
     main()
