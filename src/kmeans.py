@@ -78,18 +78,18 @@ class kmeans:
 def main():
     rsg = readSimulateGene.readSimulateGene()
     rsg.generate_sequences()
-    sequences = rsg.sequences
-    familles = rsg.familles
+    sequences = rsg.sequences[0:10]
+    familles = rsg.familles[0:10]
     km = kmeans(sequences, familles)
     km.clean_familles()
     #km.matrice_distance_levenshtein()
     km.matrice_distance_hamming()
     #print(km.D)
     km.algo_kmeans(len(np.unique(familles)))
-    #print("Familles prédites :")
-    #print(km.prediction)
-    #print("Familles attendues :")
-    #print(km.familles)
+    print("Familles prédites :")
+    print(km.prediction)
+    print("Familles attendues :")
+    print(km.familles)
     km.eval_perf()
 
 if __name__=="__main__":
