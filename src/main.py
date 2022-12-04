@@ -3,6 +3,9 @@ import readSimulateGene
 import upgma
 import matplotlib.pyplot as plt
 
+from src.confusion import confusion, confusion_print, perf_confusion
+
+
 def test_upgma(sequences, familles):
     up = upgma.upgma(sequences, familles)
     
@@ -25,8 +28,15 @@ def test_upgma(sequences, familles):
     print("")
 
     # Évaluation des performances de l'algo de clustering :
-    up.eval_perf(familles)
+    #up.eval_perf(familles)
 
+    TP, TN, FP, FN = confusion(familles, up.clusters)
+    confusion_print(TP, TN, FP, FN)
+    accuracy, recall, precision, F1 = perf_confusion(TP, TN, FP, FN)
+
+    print("accuracy :", accuracy)
+    print("recall :", recall)
+    print("precision :", precision)
     # Génération de l'arbre : 
     up.generate_tree(jointures)
 

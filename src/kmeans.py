@@ -9,6 +9,8 @@ import readSimulateGene
 import numpy as np
 from sklearn.metrics import confusion_matrix
 
+from src.confusion import confusion_print, confusion, perf_confusion
+
 
 class kmeans:
 
@@ -77,39 +79,6 @@ class kmeans:
         accuracy = round(100*np.sum(np.diag(conf_matrix))/np.sum(conf_matrix),1) #somme des diagos / somme de tous les éléments
         print(f"Accuracy : {accuracy} %")
 
-
-def confusion(Fpredites, Fattendues):
-    TruePositive,TrueNegative,FalsePositive,FalseNegative = 0,0,0,0
-    for i in range(len(Fpredites)):
-        fp1, fa1 = Fpredites[i], Fattendues[i]
-        for j in range(i+1,len(Fpredites)):
-            fp2, fa2 = Fpredites[j], Fattendues[j]
-            # True positive
-            if fp1 == fp2 and fa1==fa2 :
-                TruePositive +=1
-            # False positive
-            elif fp1 == fp2 and fa1!=fa2 :
-                FalsePositive += 1
-            # True positive
-            elif fp1 != fp2 and fa1!=fa2 :
-                TrueNegative += 1
-            # False negative
-            else : FalseNegative += 1
-    return TruePositive,TrueNegative,FalsePositive,FalseNegative
-
-def perf_confusion(TP,TN,FP,FN):
-    N=TP+TN+FP+FN
-    accuracy = (TP+TN)/N
-    recall = TP/(TP+FN)
-    precision = TP/(TP+TN)
-    return accuracy,recall,precision
-
-def confusion_print(TP, TN, FP, FN):
-    array = [[TN, FN], [FP, TP]]
-    df = pd.DataFrame(array, index=["Negative Prediction", "Positive Prediction"],
-                      columns=["Negative Reality", "Positive Reality"])
-    print(df)
-
 def main():
     rsg = readSimulateGene.readSimulateGene()
     rsg.generate_sequences()
@@ -128,7 +97,8 @@ def main():
 
     TP, TN, FP, FN = confusion(km.prediction, km.familles)
     confusion_print(TP, TN, FP, FN)
-    accuracy, recall, precision = perf_confusion(TP,TN,FP,FN)
+    accuracy, recall, precision, F1 = perf_confusion(TP,TN,FP,FN)
+
     print("accuracy :", accuracy)
     print("recall :", recall)
     print("precision :", precision)
