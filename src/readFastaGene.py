@@ -33,9 +33,10 @@ class readFastaGene:
                         break
                 else:
                     seq.append(line.replace("\n", ""))
-            self.sequences.append(''.join(seq))  # on stocke "l'ancienne séquence" (du header précédent)
+            if countPig<limit and countHuman<limit: #utile que si on va jusqu'au bout du fichier
+                self.sequences.append(''.join(seq))  # on stocke "l'ancienne séquence" (du header précédent)
 
     def get_sequences(self,limit):
         files = ["genesHuman.fna",'genesPig.fna']
         for file in files:
-            self.read_fasta_file("genes/fasta_files/",file, limit)
+            self.read_fasta_file("data/",file, limit)
