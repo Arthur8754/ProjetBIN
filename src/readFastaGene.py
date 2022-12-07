@@ -39,4 +39,4 @@ class readFastaGene:
     def get_sequences(self,limit):
         files = ["genesHuman.fna",'genesPig.fna']
         for file in files:
-            self.read_fasta_file("data/",file, limit)
+            self.read_fasta_file("genes/fasta_files/",file, limit)
