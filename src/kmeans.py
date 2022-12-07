@@ -5,6 +5,7 @@ import pandas as pd
 
 import distances
 from sklearn.cluster import KMeans
+import readFastaGene
 import readSimulateGene
 import numpy as np
 from sklearn.metrics import confusion_matrix
@@ -103,5 +104,31 @@ def main():
     print("recall :", recall)
     print("precision :", precision)
 
+def main2():
+    rsg = readFastaGene.readFastaGene()
+    rsg.get_sequences(limit=10)
+    sequences = rsg.sequences
+    familles = rsg.familles
+    print(familles,len(familles))
+
+    km = kmeans(sequences, familles)
+    km.clean_familles()
+    # km.matrice_distance_levenshtein()
+    km.matrice_distance_hamming()
+    # print(km.D)
+    km.algo_kmeans(len(np.unique(familles)))
+    print("Familles prédites :")
+    print(km.prediction)
+    print("Familles attendues :")
+    print(km.familles)
+
+    TP, TN, FP, FN = confusion(km.prediction, km.familles)
+    confusion_print(TP, TN, FP, FN)
+    accuracy, recall, precision, F1 = perf_confusion(TP, TN, FP, FN)
+
+    print("accuracy :", accuracy)
+    print("recall :", recall)
+    print("precision :", precision)
+
 if __name__=="__main__":
-    main()
+    main2()
