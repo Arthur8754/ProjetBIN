@@ -1,6 +1,9 @@
 """
 Dans cette classe, on applique un algo de clustering hiérarchique (en ascendant) avec scikit learn
 """
+from src import readFastaGene
+from src.confusion import confusion, confusion_print, perf_confusion
+from src.proximiteEspece import proximite_global
 
 """
 Dans cette classe, on va appliquer l'algorithme des KMeans sur nos gènes. Plus précisément, on va l'appliquer sur Levenshtein.
@@ -86,8 +89,8 @@ def main():
     familles = rsg.familles[0:10]
     agg = agglomerative(sequences, familles)
     agg.clean_familles()
-    agg.matrice_distance_levenshtein()
-    #agg.matrice_distance_hamming()
+    #agg.matrice_distance_levenshtein()
+    agg.matrice_distance_hamming()
     print(agg.D)
     agg.algo_agglomerative_clustering(len(np.unique(familles)))
     print("Familles prédites :")
@@ -96,5 +99,34 @@ def main():
     print(agg.familles)
     agg.eval_perf()
 
+    TP, TN, FP, FN = confusion(agg.prediction, agg.familles)
+    confusion_print(TP, TN, FP, FN)
+    accuracy, recall, precision, F1 = perf_confusion(TP, TN, FP, FN)
+
+    print("accuracy :", accuracy)
+    print("recall :", recall)
+    print("precision :", precision)
+
+
+def main2():
+    limit = 50
+    N = 10  # Nb_familles_differentes
+    rsg = readFastaGene.readFastaGene()
+    rsg.get_sequence_Human_Pig_Mosquito(limit=limit)
+    sequences = rsg.sequences
+    familles = [k for k in range(N - 1)] + [0 for k in range(N-1,limit*3)]  # Pour avoir 10 familles différentes
+    agg = agglomerative(sequences, familles)
+    agg.clean_familles()
+    #agg.matrice_distance_levenshtein()
+    agg.matrice_distance_hamming()
+    agg.algo_agglomerative_clustering(N)
+    fam_human = agg.prediction[:limit]
+    fam_pig = agg.prediction[limit:2 * limit]
+    fam_mosquito = agg.prediction[2 * limit:]
+    prox_Human_Pig = proximite_global(fam_human, fam_pig, N)
+    print(f"proximité entre Humain et Cochon : {prox_Human_Pig * 100}%")
+    prox_Human_Mosquito = proximite_global(fam_human, fam_mosquito, N)
+    print(f"proximité entre Humain et Moustique : {prox_Human_Mosquito * 100}%")
+
 if __name__=="__main__":
-    main()
+    main2()

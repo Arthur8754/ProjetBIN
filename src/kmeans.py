@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 
 from src.confusion import confusion_print, confusion, perf_confusion
-
+from src.proximiteEspece import *
 
 class kmeans:
 
@@ -106,7 +106,7 @@ def main():
 
 def main2():
     rsg = readFastaGene.readFastaGene()
-    rsg.get_sequences(limit=10)
+    rsg.get_sequences(limit=30)
     sequences = rsg.sequences
     familles = rsg.familles
     print(familles,len(familles))
@@ -130,5 +130,71 @@ def main2():
     print("recall :", recall)
     print("precision :", precision)
 
+def main_prediction_Human_Pig():
+    limit = 50
+    rsg = readFastaGene.readFastaGene()
+    rsg.get_sequences(limit=limit)
+    sequences = rsg.sequences
+    N = 10 #Nb_familles_differentes
+    familles = [k for k in range(N-1)] + [0 for k in range(limit-(N-1))] #Pour avoir 10 familles différentes
+    km = kmeans(sequences, familles)
+    km.clean_familles()
+    # km.matrice_distance_levenshtein()
+    km.matrice_distance_hamming()
+    # print(km.D)
+    km.algo_kmeans(len(np.unique(familles)))
+    fam_human = km.prediction[:limit]
+    fam_pig = km.prediction[limit:]
+    print("fam_human : ",fam_human)
+    print("fam_pig   : ",fam_pig)
+
+    prox = proximite_global(fam_human, fam_pig, N)
+    print(f"proximité entre Humain et Cochon : {prox*100}%")
+def main_prediction_Human_Mosquito():
+    limit = 50
+    rsg = readFastaGene.readFastaGene()
+    rsg.get_sequences_mosquito(limit=limit)
+    sequences = rsg.sequences
+    N = 10 #Nb_familles_differentes
+    familles = [k for k in range(N-1)] + [0 for k in range(limit-(N-1))] #Pour avoir 10 familles différentes
+    km = kmeans(sequences, familles)
+    km.clean_familles()
+    # km.matrice_distance_levenshtein()
+    km.matrice_distance_hamming()
+    # print(km.D)
+    km.algo_kmeans(len(np.unique(familles)))
+    fam_human = km.prediction[:limit]
+    fam_mosquito = km.prediction[limit:]
+    print("fam_Human : ",fam_human)
+    print("fam_Mosquito   : ",fam_mosquito)
+    prox = proximite_global(fam_human, fam_mosquito, N)
+    print(f"proximité entre Humain et Moustique : {prox*100}%")
+
+def main_prediction_Human_Mosquito_Pig():
+    limit = 50
+    N = 10  # Nb_familles_differentes
+
+
+    rsg = readFastaGene.readFastaGene()
+    rsg.get_sequence_Human_Pig_Mosquito(limit=limit)
+    sequences = rsg.sequences
+    familles = [k for k in range(N - 1)] + [0 for k in range(N - 1, limit * 3)]  # Pour avoir 10 familles différentes
+    km = kmeans(sequences, familles)
+    km.clean_familles()
+    #km.matrice_distance_levenshtein()
+    km.matrice_distance_hamming()
+    # print(km.D)
+    km.algo_kmeans(len(np.unique(familles)))
+    print(len(km.prediction))
+    fam_human = km.prediction[:limit]
+    fam_pig = km.prediction[limit:2*limit]
+    fam_mosquito = km.prediction[2*limit:]
+    prox_Human_Pig = proximite_global(fam_human, fam_pig, N)
+    print(f"proximité entre Humain et Cochon : {prox_Human_Pig * 100}%")
+    prox_Human_Mosquito = proximite_global(fam_human, fam_mosquito, N)
+    print(f"proximité entre Humain et Moustique : {prox_Human_Mosquito * 100}%")
+
 if __name__=="__main__":
-    main2()
+    #main_prediction_Human_Pig()
+    #main_prediction_Human_Mosquito()
+    main_prediction_Human_Mosquito_Pig()

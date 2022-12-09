@@ -3,11 +3,12 @@ import pandas as pd
 
 def confusion(Fpredites, Fattendues):
     TruePositive,TrueNegative,FalsePositive,FalseNegative = 0,0,0,0
-    print(len(Fpredites),len(Fattendues))
+    #print("confusion - len Fattendues : ", len(Fattendues))
+    #print("confusion - len Fpredites : ", len(Fpredites))
     for i in range(len(Fpredites)):
         fp1, fa1 = Fpredites[i], Fattendues[i]
         for j in range(i+1,len(Fpredites)-1):
-            print(i,j)
+            #print("confusion : ",i,j)
             fp2, fa2 = Fpredites[j], Fattendues[j]
             # True positive
             if fp1 == fp2 and fa1==fa2 :

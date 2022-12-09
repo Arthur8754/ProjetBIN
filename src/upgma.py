@@ -11,6 +11,9 @@ from io import StringIO
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
+from src import distances
+
+
 class upgma:
 
     def __init__(self,sequences,familles):
@@ -31,7 +34,8 @@ class upgma:
                 if j==i:
                     dist = 0
                 elif i<j:
-                    dist = self.dist_levenshtein(self.sequences[i],self.sequences[j])
+                    #dist = self.dist_levenshtein(self.sequences[i],self.sequences[j])
+                    dist = distances.distances().dist_hamming(self.sequences[i], self.sequences[j])
                 else:
                     dist = self.D[j][i]
                 self.D[i].append(dist)
