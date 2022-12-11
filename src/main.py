@@ -41,6 +41,7 @@ def test_upgma(sequences, familles):
     print("accuracy :", accuracy)
     print("recall :", recall)
     print("precision :", precision)
+    print("F1 : ",F1)
     # Génération de l'arbre : 
     up.generate_tree(jointures)
 

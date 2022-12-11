@@ -1,9 +1,9 @@
 """
 Dans cette classe, on applique un algo de clustering hiérarchique (en ascendant) avec scikit learn
 """
-from src import readFastaGene
-from src.confusion import confusion, confusion_print, perf_confusion
-from src.proximiteEspece import proximite_global
+#from src import readFastaGene
+from confusion import confusion, confusion_print, perf_confusion
+from proximiteEspece import proximite_global
 
 """
 Dans cette classe, on va appliquer l'algorithme des KMeans sur nos gènes. Plus précisément, on va l'appliquer sur Levenshtein.
@@ -85,19 +85,19 @@ class agglomerative:
 def main():
     rsg = readSimulateGene.readSimulateGene()
     rsg.generate_sequences()
-    sequences = rsg.sequences[0:10]
-    familles = rsg.familles[0:10]
+    sequences = rsg.sequences[0:20]
+    familles = rsg.familles[0:20]
     agg = agglomerative(sequences, familles)
     agg.clean_familles()
-    #agg.matrice_distance_levenshtein()
-    agg.matrice_distance_hamming()
+    agg.matrice_distance_levenshtein()
+    #agg.matrice_distance_hamming()
     print(agg.D)
     agg.algo_agglomerative_clustering(len(np.unique(familles)))
     print("Familles prédites :")
     print(agg.prediction)
     print("Familles attendues :")
     print(agg.familles)
-    agg.eval_perf()
+    #agg.eval_perf()
 
     TP, TN, FP, FN = confusion(agg.prediction, agg.familles)
     confusion_print(TP, TN, FP, FN)
@@ -106,6 +106,7 @@ def main():
     print("accuracy :", accuracy)
     print("recall :", recall)
     print("precision :", precision)
+    print("F1 : ", F1)
 
 
 def main2():
@@ -129,4 +130,4 @@ def main2():
     print(f"proximité entre Humain et Moustique : {prox_Human_Mosquito * 100}%")
 
 if __name__=="__main__":
-    main2()
+    main()

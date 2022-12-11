@@ -5,9 +5,9 @@ def confusion(Fpredites, Fattendues):
     TruePositive,TrueNegative,FalsePositive,FalseNegative = 0,0,0,0
     #print("confusion - len Fattendues : ", len(Fattendues))
     #print("confusion - len Fpredites : ", len(Fpredites))
-    for i in range(len(Fpredites)):
+    for i in range(len(Fattendues)):
         fp1, fa1 = Fpredites[i], Fattendues[i]
-        for j in range(i+1,len(Fpredites)-1):
+        for j in range(i+1,len(Fattendues)-1):
             #print("confusion : ",i,j)
             fp2, fa2 = Fpredites[j], Fattendues[j]
             # True positive
@@ -27,7 +27,7 @@ def perf_confusion(TP,TN,FP,FN):
     N=TP+TN+FP+FN
     accuracy = (TP+TN)/N
     recall = TP/(TP+FN)
-    precision = TP/(TP+TN)
+    precision = TP/(TP+FP)
     F1 = 2 * precision*recall/(precision+recall)
     return accuracy,recall,precision, F1
 

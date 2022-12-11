@@ -10,8 +10,10 @@ from Bio import Phylo
 from io import StringIO
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
+from confusion import confusion, confusion_print, perf_confusion
 
-from src import distances
+import distances
+import readSimulateGene
 
 
 class upgma:
@@ -23,6 +25,13 @@ class upgma:
         self.D = [[] for k in range(len(sequences))]
         self.clusters = []
         self.famille_extract = 0 #pour l'extraction de clusters
+
+    def clean_familles(self):
+        """
+        Fonction auxiliaire qui transforme ['1','1','2'...] en [1, 1, 2...]
+        """
+        for i in range(len(self.familles)):
+            self.familles[i] = int(self.familles[i])
 
     def init_D(self):
         """
@@ -167,3 +176,38 @@ class upgma:
         print("")
         accuracy = round(100*np.sum(np.diag(conf_matrix))/np.sum(conf_matrix),1) #somme des diagos / somme de tous les éléments
         print(f"Accuracy : {accuracy} %")
+
+def main():
+    rsg = readSimulateGene.readSimulateGene()
+    rsg.generate_sequences()
+    sequences = rsg.sequences[0:20]
+    familles = rsg.familles[0:20]
+    up = upgma(sequences, familles)
+    
+    # Application de l'algorithme UPGMA :
+    jointures, jointures_array = up.algo_upgma()
+
+    # Extraction des clusters :
+    up.extract_clusters(jointures_array)
+
+    print("Familles attendues :")
+    print(familles)
+    print("")
+    print("Familles prédites :")
+    print(up.clusters)
+    print("")
+
+    # Évaluation des performances de l'algo de clustering :
+    #up.eval_perf(familles)
+
+    TP, TN, FP, FN = confusion(familles, up.clusters)
+    confusion_print(TP, TN, FP, FN)
+    accuracy, recall, precision, F1 = perf_confusion(TP, TN, FP, FN)
+
+    print("accuracy :", accuracy)
+    print("recall :", recall)
+    print("precision :", precision)
+    print("F1 : ",F1)
+
+if __name__=="__main__":
+    main()

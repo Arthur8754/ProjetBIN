@@ -10,8 +10,8 @@ import readSimulateGene
 import numpy as np
 from sklearn.metrics import confusion_matrix
 
-from src.confusion import confusion_print, confusion, perf_confusion
-from src.proximiteEspece import *
+from confusion import confusion_print, confusion, perf_confusion
+from proximiteEspece import *
 
 class kmeans:
 
@@ -83,8 +83,8 @@ class kmeans:
 def main():
     rsg = readSimulateGene.readSimulateGene()
     rsg.generate_sequences()
-    sequences = rsg.sequences[0:10]
-    familles = rsg.familles[0:10]
+    sequences = rsg.sequences[0:20]
+    familles = rsg.familles[0:20]
     km = kmeans(sequences, familles)
     km.clean_familles()
     #km.matrice_distance_levenshtein()
@@ -103,6 +103,7 @@ def main():
     print("accuracy :", accuracy)
     print("recall :", recall)
     print("precision :", precision)
+    print("F1 : ",F1)
 
 def main2():
     rsg = readFastaGene.readFastaGene()
@@ -197,4 +198,5 @@ def main_prediction_Human_Mosquito_Pig():
 if __name__=="__main__":
     #main_prediction_Human_Pig()
     #main_prediction_Human_Mosquito()
-    main_prediction_Human_Mosquito_Pig()
+    #main_prediction_Human_Mosquito_Pig()
+    main()
