@@ -51,7 +51,20 @@ deactivate
 
 ## Lancer les scripts :
 
-Il suffit de lancer le programme ```main.py``` depuis le dossier ```src```:
+Il suffit de lancer le programme ```main.py``` depuis le dossier ```src``` de la façon suivante :
+
 ````
-python3 main.py
+python3 main.py methode simulated hamming
 ````
+
+Avec : 
+- methode : méthode de clustering utilisée : kmeans, agglomerative, ou upgma ;
+- simulated : 1 si on veut utiliser les gènes simulés, 0 si on veut utiliser de vrais gènes ;
+- hamming : 1 si on veut utiliser la distance de Hamming, 0 si on veut utiliser la distance de Levenshtein.
+
+ATTENTION : les fichiers de gènes réels ne sont pas disponibles dans le dépôt, ceux-ci étant trop gros. Si vous voulez lancer les algorithmes dessus, voici la procédure à suivre :
+- Aller chercher les fichiers fasta à l'adresse suivante (fichiers "Genomic Coding Sequences (GCS)"): 
+    - Humain : https://www.ncbi.nlm.nih.gov/data-hub/genome/GCF_000001405.40/
+    - Cochon : https://www.ncbi.nlm.nih.gov/data-hub/genome/GCF_002204515.2/ 
+    - Moustique : https://www.ncbi.nlm.nih.gov/data-hub/genome/GCF_000003025.6/.
+- Mettre tous les fichiers lus dans ```src/data```, et les nommer respectivement : ```genesHuman.fna```, ```genesMosquito.fna```, ```genesPig.fna```.

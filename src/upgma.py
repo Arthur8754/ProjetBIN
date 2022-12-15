@@ -176,38 +176,3 @@ class upgma:
         print("")
         accuracy = round(100*np.sum(np.diag(conf_matrix))/np.sum(conf_matrix),1) #somme des diagos / somme de tous les éléments
         print(f"Accuracy : {accuracy} %")
-
-def main():
-    rsg = readSimulateGene.readSimulateGene()
-    rsg.generate_sequences()
-    sequences = rsg.sequences[0:20]
-    familles = rsg.familles[0:20]
-    up = upgma(sequences, familles)
-    
-    # Application de l'algorithme UPGMA :
-    jointures, jointures_array = up.algo_upgma()
-
-    # Extraction des clusters :
-    up.extract_clusters(jointures_array)
-
-    print("Familles attendues :")
-    print(familles)
-    print("")
-    print("Familles prédites :")
-    print(up.clusters)
-    print("")
-
-    # Évaluation des performances de l'algo de clustering :
-    #up.eval_perf(familles)
-
-    TP, TN, FP, FN = confusion(familles, up.clusters)
-    confusion_print(TP, TN, FP, FN)
-    accuracy, recall, precision, F1 = perf_confusion(TP, TN, FP, FN)
-
-    print("accuracy :", accuracy)
-    print("recall :", recall)
-    print("precision :", precision)
-    print("F1 : ",F1)
-
-if __name__=="__main__":
-    main()

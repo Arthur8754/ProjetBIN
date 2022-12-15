@@ -67,12 +67,12 @@ class readFastaGene:
     def get_sequences(self,limit):
         files = ["genesHuman.fna",'genesPig.fna']
         for file in files:
-            self.read_fasta_file("genes/fasta_files/",file, limit)
+            self.read_fasta_file("data/",file, limit)
 
     def get_sequences_mosquito(self,limit):
         files = ["genesHuman.fna",'genesMosquito.fna']
         for file in files:
-            self.read_fasta_file_mosquito("genes/fasta_files/", file, limit)
+            self.read_fasta_file_mosquito("data/", file, limit)
 
     def read_fast_file_all(self,filepath,filename,limit):
         header_pattern = r">lcl*"
@@ -112,4 +112,4 @@ class readFastaGene:
     def get_sequence_Human_Pig_Mosquito(self,limit):
         files = ["genesHuman.fna", "genesPig.fna", 'genesMosquito.fna']
         for file in files:
-            self.read_fast_file_all("genes/fasta_files/", file, limit)
+            self.read_fast_file_all("data/", file, limit)

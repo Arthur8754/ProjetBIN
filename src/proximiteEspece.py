@@ -30,6 +30,7 @@ def proximite_local_pondere(Fpredite1,Fpredite2,NbFamilleTotal):
     return prox_local_pondere
 
 def proximite_global(Fpredite1,Fpredite2,NbFamilleTotal):
+    print(Fpredite2)
     NbSequence = len(Fpredite1) + len(Fpredite2)
     prox_local_pondere = proximite_local_pondere(Fpredite1,Fpredite2,NbFamilleTotal)
     moyenne_pondere = sum(prox_local_pondere) / NbSequence
